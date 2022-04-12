@@ -25,7 +25,7 @@ HOMEWORK_STATUSES = {
     'rejected': 'Работа проверена: у ревьюера есть замечания.'
 }
 
-"""Настройка логов"""
+"""Настройка логов."""
 logging.basicConfig(
     handlers=[logging.StreamHandler()],
     level=logging.INFO,
@@ -36,11 +36,12 @@ logger = logging.getLogger(__name__)
 
 class APIError(Exception):
     """Кастомная ошибка API."""
+
     pass
 
 
 def send_message(bot, message):
-    """Отправка сообщения в Telegram чат"""
+    """Отправка сообщения в Telegram чат."""
     try:
         bot.send_message(TELEGRAM_CHAT_ID, message)
         logger.info(f'Отправлено сообщение: "{message}"')
@@ -49,7 +50,7 @@ def send_message(bot, message):
 
 
 def get_api_answer(current_timestamp):
-    """Запрос к API-сервиса"""
+    """Запрос к API-сервиса."""
     timestamp = current_timestamp
     params = {'from_date': timestamp}
     try:
@@ -71,7 +72,7 @@ def get_api_answer(current_timestamp):
 
 
 def check_response(response):
-    """Проверка ответа API на корректность"""
+    """Проверка ответа API на корректность."""
     if not isinstance(response, dict):
         message = 'Ответ API не словарь'
         logger.error(message)
@@ -85,7 +86,7 @@ def check_response(response):
 
 
 def parse_status(homework):
-    """Извлечение из информации о конкретной домашней работе статус этой работы"""
+    """Извлечение из информации о конкретной домашней работе."""
     keys = ['status', 'homework_name']
     for key in keys:
         if key not in homework:
@@ -133,7 +134,6 @@ def main():
             message = f'Сбой в работе программы: {error}'
 
             time.sleep(RETRY_TIME)
-
 
 
 if __name__ == '__main__':
