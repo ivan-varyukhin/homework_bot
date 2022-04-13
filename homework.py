@@ -96,14 +96,15 @@ def parse_status(homework):
             message = f'Ключа {key} нет в ответе API'
             logger.error(message)
             raise KeyError(message)
-    homework_status = homework['status']
-    if homework_status not in HOMEWORK_STATUSES:
-        message = 'Неизвестный статус домашней работы'
-        logger.error(message)
-        raise KeyError(message)
     homework_name = homework['homework_name']
     verdict = HOMEWORK_STATUSES[homework_status]
-    return f'Изменился статус проверки работы "{homework_name}". {verdict}'
+    reviewer_comment = homework['reviewer_comment']
+    reviewer_comment_text = ''
+    if reviewer_comment:
+        reviewer_comment_text = ' Комментарий ревьювера: ' + reviewer_comment
+    return (f'Изменился статус проверки работы "{homework_name}"{chr(10)}'
+            f'{verdict}{chr(10)}{reviewer_comment_text}')
+#    return f'Изменился статус проверки работы "{homework_name}". {verdict}'
 
 
 def check_tokens():
