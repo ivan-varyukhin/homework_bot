@@ -1,4 +1,4 @@
-import logging
+﻿import logging
 import os
 import time
 from http import HTTPStatus
@@ -51,6 +51,7 @@ def send_message(bot, message):
 
 def get_api_answer(current_timestamp):
     """Запрос к API-сервиса."""
+    logger.debug('Запрос к API...')
     timestamp = current_timestamp
     params = {'from_date': timestamp}
     try:
@@ -73,6 +74,7 @@ def get_api_answer(current_timestamp):
 
 def check_response(response):
     """Проверка ответа API на корректность."""
+    logger.debug('Проверка ответа API на корректность...')
     if not isinstance(response, dict):
         message = 'Ответ API не словарь'
         logger.error(message)
@@ -87,6 +89,7 @@ def check_response(response):
 
 def parse_status(homework):
     """Извлечение из информации о конкретной домашней работе."""
+    logger.debug('Получение данных о домашней работе...')
     keys = ['status', 'homework_name']
     for key in keys:
         if key not in homework:
@@ -105,12 +108,14 @@ def parse_status(homework):
 
 def check_tokens():
     """Проверяет переменные окружения."""
+    logger.debug('Проверка переменных окружения...')
     vars = [PRACTICUM_TOKEN, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID]
     return None not in vars
 
 
 def main():
     """Основная логика работы бота."""
+    logger.debug('Запуск...')
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
     current_timestamp = int(time.time() - 86400)
     if check_tokens is False:
