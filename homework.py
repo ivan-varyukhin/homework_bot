@@ -56,27 +56,31 @@ def get_api_answer(current_timestamp):
     params = {'from_date': timestamp}
     try:
         response = requests.get(ENDPOINT, headers=HEADERS, params=params)
+        if response.status_code != HTTPStatus.OK: 
+            message = 'Ответ API отличен от ОК' 
+            logger.error(message) 
+            raise Exception(message) 
     except Exception:
         message = 'Ошибка при вызове API'
         logger.error(message)
         raise APIError(message)
     try:
-        if response.status_code != HTTPStatus.OK:
-            message = 'API не отвечает'
-            logger.error(message)
-            raise Exception(message)
+        data = response.json()
     except Exception:
-        message = 'Ошибка при вызове API'
+        message = 'Ответ API не json'
         logger.error(message)
-        raise APIError(message)
-    return response.json()
+        raise ValueError(message)
+    return data
 
 
 def check_response(response):
     """Проверка ответа API на корректность."""
     logger.debug('Проверка ответа API на корректность...')
-
+    if 'current_date' in response:
+        current_timestamp = response['current_date']
     homeworks = response['homeworks']
+# так автотест не жрет
+#    homeworks = response.get('homeworks')
     if homeworks is None:
         message = 'Список пуст'
         raise APIError(message)
@@ -106,13 +110,6 @@ def parse_status(homework):
         raise KeyError(message)
     homework_name = homework['homework_name']
     verdict = HOMEWORK_STATUSES[homework_status]
-# так по функциональности интереснее, но автотесты не жрут
-#    reviewer_comment = homework['reviewer_comment']
-#    reviewer_comment_text = ''
-#    if reviewer_comment:
-#        reviewer_comment_text = ' Комментарий ревьювера: ' + reviewer_comment
-#    return (f'Изменился статус проверки работы "{homework_name}"{chr(10)}'
-#            f'{verdict}{chr(10)}{reviewer_comment_text}')
     return f'Изменился статус проверки работы "{homework_name}". {verdict}'
 
 
@@ -120,7 +117,7 @@ def check_tokens():
     """Проверяет переменные окружения."""
     logger.debug('Проверка переменных окружения...')
     vars = [PRACTICUM_TOKEN, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID]
-    return None not in vars
+    return all(vars)
 
 
 def main():
@@ -137,19 +134,19 @@ def main():
     while True:
         try:
             response = get_api_answer(current_timestamp)
-            if 'current_date' in response:
-                current_timestamp = response['current_date']
             homework = check_response(response)
-            if homework is not None:
-                message = parse_status(homework)
-                if message is not None:
-                    send_message(bot, message)
-            time.sleep(RETRY_TIME)
+            if homework is None:
+                continue;
+            message = parse_status(homework)
+            if message is None:
+                continue;
+            send_message(bot, message)
 
         except Exception as error:
             message = f'Сбой в работе программы: {error}'
             logger.critical(message)
 
+        finally:
             time.sleep(RETRY_TIME)
 
 
