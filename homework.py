@@ -96,6 +96,11 @@ def parse_status(homework):
             message = f'Ключа {key} нет в ответе API'
             logger.error(message)
             raise KeyError(message)
+    homework_status = homework['status'] 
+    if homework_status not in HOMEWORK_STATUSES: 
+        message = 'Неизвестный статус домашней работы' 
+        logger.error(message) 
+        raise KeyError(message)
     homework_name = homework['homework_name']
     verdict = HOMEWORK_STATUSES[homework_status]
     reviewer_comment = homework['reviewer_comment']
