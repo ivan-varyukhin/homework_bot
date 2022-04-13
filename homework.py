@@ -103,7 +103,6 @@ def parse_status(homework):
         raise KeyError(message)
     homework_name = homework['homework_name']
     verdict = HOMEWORK_STATUSES[homework_status]
-    reviewer_comment = homework['reviewer_comment']
     return f'Изменился статус проверки работы "{homework_name}". {verdict}'
 
 
