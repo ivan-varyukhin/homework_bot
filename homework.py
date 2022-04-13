@@ -76,9 +76,6 @@ def get_api_answer(current_timestamp):
 def check_response(response):
     """Проверка ответа API на корректность."""
     logger.debug('Проверка ответа API на корректность...')
-    if 'current_date' in response:
-        global current_timestamp
-        current_timestamp = response['current_date']
     homeworks = response['homeworks']
 # так автотест не жрет
 #    homeworks = response.get('homeworks')
@@ -135,6 +132,8 @@ def main():
     while True:
         try:
             response = get_api_answer(current_timestamp)
+            if 'current_date' in response:
+                current_timestamp = response['current_date']
             homework = check_response(response)
             if homework is None:
                 continue
