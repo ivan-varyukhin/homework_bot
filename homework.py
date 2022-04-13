@@ -76,7 +76,7 @@ def check_response(response):
     """Проверка ответа API на корректность."""
     logger.debug('Проверка ответа API на корректность...')
 
-    homeworks = response.get('homeworks')
+    homeworks = response['homeworks']
     if homeworks is None:
         message = 'Список пуст'
         raise APIError(message)
