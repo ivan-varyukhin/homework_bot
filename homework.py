@@ -75,14 +75,17 @@ def get_api_answer(current_timestamp):
 def check_response(response):
     """Проверка ответа API на корректность."""
     logger.debug('Проверка ответа API на корректность...')
-    if not isinstance(response, dict):
-        message = 'Ответ API не словарь'
-        logger.error(message)
-        raise TypeError(message)
-    if ['homeworks'][0] not in response:
-        message = 'В ответе API нет домашней работы'
-        logger.error(message)
-        raise IndexError(message)
+
+    homeworks = response.get('homeworks')
+    if homeworks is None:
+        message = 'Список пуст'
+        raise APIError(message)
+    if not isinstance(homeworks, list):
+        message = 'Неверный формат ответа'
+        raise APIError(message)
+    if not homeworks:
+        return None
+
     homework = response.get('homeworks')[0]
     return homework
 
