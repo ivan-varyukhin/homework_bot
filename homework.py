@@ -103,14 +103,7 @@ def parse_status(homework):
         raise KeyError(message)
     homework_name = homework['homework_name']
     verdict = HOMEWORK_STATUSES[homework_status]
- #   reviewer_comment = homework['reviewer_comment']
-    reviewer_comment = homework.get('reviewer_comment')
-    reviewer_comment_text = ''
-    if reviewer_comment:
-        reviewer_comment_text = ' Комментарий ревьювера: ' + reviewer_comment
-    return (f'Изменился статус проверки работы "{homework_name}"{chr(10)}'
-            f'{verdict}{chr(10)}{reviewer_comment_text}')
-#    return f'Изменился статус проверки работы "{homework_name}". {verdict}'
+    return f'Изменился статус проверки работы "{homework_name}". {verdict}'
 
 
 def check_tokens():
