@@ -52,8 +52,7 @@ def send_message(bot, message):
 def get_api_answer(current_timestamp):
     """Запрос к API-сервиса."""
     logger.debug('Запрос к API...')
-    timestamp = current_timestamp
-    params = {'from_date': timestamp}
+    params = {'from_date': current_timestamp}
     try:
         response = requests.get(ENDPOINT, headers=HEADERS, params=params)
         if response.status_code != HTTPStatus.OK:
@@ -77,8 +76,6 @@ def check_response(response):
     """Проверка ответа API на корректность."""
     logger.debug('Проверка ответа API на корректность...')
     homeworks = response['homeworks']
-# так автотест не жрет
-#    homeworks = response.get('homeworks')
     if homeworks is None:
         message = 'Список пуст'
         raise APIError(message)
@@ -114,16 +111,14 @@ def parse_status(homework):
 def check_tokens():
     """Проверяет переменные окружения."""
     logger.debug('Проверка переменных окружения...')
-    vars = [PRACTICUM_TOKEN, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID]
-    return all(vars)
+    return all([PRACTICUM_TOKEN, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID])
 
 
 def main():
     """Основная логика работы бота."""
     logger.debug('Запуск...')
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
-#    current_timestamp = int(time.time() - 86400)
-    current_timestamp = 0
+    current_timestamp = int(time.time() - 86400)
     if check_tokens is False:
         message = 'Проблема с переменными окружения'
         logger.critical(message)
