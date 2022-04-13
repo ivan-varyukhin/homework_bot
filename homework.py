@@ -103,7 +103,8 @@ def parse_status(homework):
         raise KeyError(message)
     homework_name = homework['homework_name']
     verdict = HOMEWORK_STATUSES[homework_status]
-    reviewer_comment = homework['reviewer_comment']
+ #   reviewer_comment = homework['reviewer_comment']
+    reviewer_comment = homework.get('reviewer_comment')
     reviewer_comment_text = ''
     if reviewer_comment:
         reviewer_comment_text = ' Комментарий ревьювера: ' + reviewer_comment
