@@ -56,10 +56,10 @@ def get_api_answer(current_timestamp):
     params = {'from_date': timestamp}
     try:
         response = requests.get(ENDPOINT, headers=HEADERS, params=params)
-        if response.status_code != HTTPStatus.OK: 
-            message = 'Ответ API отличен от ОК' 
-            logger.error(message) 
-            raise Exception(message) 
+        if response.status_code != HTTPStatus.OK:
+            message = 'Ответ API отличен от ОК'
+            logger.error(message)
+            raise Exception(message)
     except Exception:
         message = 'Ошибка при вызове API'
         logger.error(message)
@@ -77,6 +77,7 @@ def check_response(response):
     """Проверка ответа API на корректность."""
     logger.debug('Проверка ответа API на корректность...')
     if 'current_date' in response:
+        global current_timestamp
         current_timestamp = response['current_date']
     homeworks = response['homeworks']
 # так автотест не жрет
@@ -136,10 +137,10 @@ def main():
             response = get_api_answer(current_timestamp)
             homework = check_response(response)
             if homework is None:
-                continue;
+                continue
             message = parse_status(homework)
             if message is None:
-                continue;
+                continue
             send_message(bot, message)
 
         except Exception as error:
