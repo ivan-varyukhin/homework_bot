@@ -117,7 +117,8 @@ def main():
     """Основная логика работы бота."""
     logger.debug('Запуск...')
     bot = telegram.Bot(token=TELEGRAM_TOKEN)
-    current_timestamp = int(time.time() - 86400)
+#    current_timestamp = int(time.time() - 86400)
+    current_timestamp = 0
     if check_tokens is False:
         message = 'Проблема с переменными окружения'
         logger.critical(message)
