@@ -110,8 +110,7 @@ def parse_status(homework):
     reviewer_comment_text = ''
     if reviewer_comment:
         reviewer_comment_text = ' Комментарий ревьювера: ' + reviewer_comment
-    return (f'Изменился статус проверки работы "{homework_name}"{chr(10)}'
-            f'{lesson_name} '
+    return (f'Изменился статус проверки работы "{lesson_name} ({homework_name})"{chr(10)}'
             f'{verdict}{chr(10)}{reviewer_comment_text}')
 #    return f'Изменился статус проверки работы "{homework_name}". {verdict}'
 
