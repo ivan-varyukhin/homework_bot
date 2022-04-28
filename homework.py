@@ -104,12 +104,14 @@ def parse_status(homework):
         logger.error(message)
         raise KeyError(message)
     homework_name = homework['homework_name']
+    lesson_name = homework['lesson_name']
     verdict = HOMEWORK_STATUSES[homework_status]
     reviewer_comment = homework['reviewer_comment']
     reviewer_comment_text = ''
     if reviewer_comment:
         reviewer_comment_text = ' Комментарий ревьювера: ' + reviewer_comment
     return (f'Изменился статус проверки работы "{homework_name}"{chr(10)}'
+            f'{lesson_name} '
             f'{verdict}{chr(10)}{reviewer_comment_text}')
 #    return f'Изменился статус проверки работы "{homework_name}". {verdict}'
 
