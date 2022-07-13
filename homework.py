@@ -56,7 +56,7 @@ def get_api_answer(current_timestamp):
     try:
         response = requests.get(ENDPOINT, headers=HEADERS, params=params)
         if response.status_code != HTTPStatus.OK:
-            message = 'Ответ API отличен от ОК'
+            message = 'Ответ API отличен от ОК: ' + str(response.status_code)
             logger.error(message)
             raise Exception(message)
     except Exception:
